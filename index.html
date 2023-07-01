@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Дерево поиска</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="main">
+    <ul>
+        <ul class="menu">
+            <li>
+
+                <label class="lab">Enter word:</label>
+
+                <input id="input_word">
+
+
+                <button type="button" id="add">Add</button>
+
+
+            </li>
+            <li>
+                <label class="lab" >Words in Tree</label>
+            </li>
+            <li>
+
+    <textarea id="words" class="multiline">
+
+    </textarea>
+            </li>
+            <li>
+                <label class="lab" >Result:</label>
+                <label id="result">This will the result</label>
+
+                <button type="button" id="find">Find</button>
+
+            </li>
+        </ul>
+
+
+    </ul>
+
+</div>
+<script>
+    require("./render.js");
+    var Tree = [];
+
+    //добавление слова
+    function addWord(word) {
+        let pointer = Tree;
+        let i;
+        for (i = 0; i < word.length-1; i++) {
+            if (pointer[word[i]] === undefined)
+                pointer[word[i]] = [];
+            pointer = pointer[word[i]]; //прыгаем на новый уровень (: , pointer - указатель на Tree[word[i]]
+        }
+        if (pointer[word[i]] === undefined)
+            pointer[word[i]] = ['*'];
+        else
+            pointer[word[i]].push('*');
+        let text = document.getElementById("words");
+        text.innerHTML += word +" , " ;
+    }
+
+    //поиск слова
+    function findWord(word)
+    {
+        let res;
+
+        let pointer = Tree;
+        let i;
+        for (i = 0; i < word.length; i++) {
+            if (pointer[word[i]] !== undefined)
+            {
+                pointer = pointer[word[i]];
+            }
+
+            else
+            {
+                res = "Нет слова"
+                return res;
+            }
+
+        }
+        if (pointer.findIndex(
+            function (e)
+            {      //если значение последнего индекса равно '*', тогда это слово уже есть, иначе нет
+            return e === "*";
+        }) !== -1)
+        {
+            res = "Есть слово";
+            return res;
+        }
+
+
+        else
+        {
+            res = "Нет слова";
+            return res;
+        }
+
+    }
+    let btnadd = document.getElementById("add");
+    btnadd.addEventListener('click', ()=>{
+        let word = document.getElementById("input_word").value;
+        let checkByDuplicate;
+        let label_res = document.getElementById("result");
+        checkByDuplicate = findWord(word);
+        if (checkByDuplicate == "Нет слова")
+        {
+            addWord(word);
+        }else{
+            label_res.innerHTML ="Дубликат слова";
+        }
+
+    });
+    let btnfind = document.getElementById("find");
+    btnfind.addEventListener('click', ()=> {
+        let word = document.getElementById("input_word").value;
+        let label_res = document.getElementById("result");
+        let result = findWord(word);
+        label_res.innerHTML = result;
+
+    });
+</script>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+
+    }
+    #input_word{
+        opacity:0.65;
+        border-radius: 7px;
+    }
+    .lab{
+
+    }
+    .menu li{
+        margin-top: 20px;
+        margin-left: 20px;
+        text-decoration: none;
+        list-style: none;
+        color:#D2006B;
+
+        padding:5px;
+        text-shadow:
+                -0   -2px 0   #000000,
+                0   -2px 0   #000000,
+                -0    2px 0   #000000,
+                0    2px 0   #000000,
+                -2px -0   0   #000000,
+                2px -0   0   #000000,
+                -2px  0   0   #000000,
+                2px  0   0   #000000,
+                -1px -2px 0   #000000,
+                1px -2px 0   #000000,
+                -1px  2px 0   #000000,
+                1px  2px 0   #000000,
+                -2px -1px 0   #000000,
+                2px -1px 0   #000000,
+                -2px  1px 0   #000000,
+                2px  1px 0   #000000,
+                -2px -2px 0   #000000,
+                2px -2px 0   #000000,
+                -2px  2px 0   #000000,
+                2px  2px 0   #000000,
+                -2px -2px 0   #000000,
+                2px -2px 0   #000000,
+                -2px  2px 0   #000000,
+                2px  2px 0   #000000;
+
+    }
+
+    body{
+
+
+        background: linear-gradient(45deg, #B40098,#B47777, #D2006B, #B59999 );
+        font-family:'Cyberpunk' ;
+        src:url(Cyberpunk/Cyberpunk.ttf);
+        background-repeat: repeat;
+        background-image: url("1.gif");
+        font-size:28px;
+
+
+
+    }
+
+    .multiline {
+        margin-left: 20px;
+        height: 150px;
+        width: 480px;
+        outline: none;
+        border: solid black 3px;
+        resize: none;
+        font-size:28px;
+        opacity:0.65;
+        color:#000000;
+    }
+    ul li{
+        margin-top: 20px;
+        margin-left: 20px;
+        text-decoration: none;
+        list-style: none;
+        color: #D2006B;
+        text-shadow:
+                -0   -1px 0   #000000,
+                0   -1px 0   #000000,
+                -0    1px 0   #000000,
+                0    1px 0   #000000,
+                -1px -0   0   #000000,
+                1px -0   0   #000000,
+                -1px  0   0   #000000,
+                1px  0   0   #000000,
+                -1px -1px 0   #000000,
+                1px -1px 0   #000000,
+                -1px  1px 0   #000000,
+                1px  1px 0   #000000,
+                -1px -1px 0   #000000,
+                1px -1px 0   #000000,
+                -1px  1px 0   #000000,
+                1px  1px 0   #000000;
+    }
+    #result{
+        font-family: "Curlz MT";
+        font-size:39px;
+    }
+    .multiline,#input_word{
+        background-color: #f4b0ed;
+    }
+    #add,#find{
+
+        text-shadow:
+                -0   -1px 0   #000000,
+                0   -1px 0   #000000,
+                -0    1px 0   #000000,
+                0    1px 0   #000000,
+                -1px -0   0   #000000,
+                1px -0   0   #000000,
+                -1px  0   0   #000000,
+                1px  0   0   #000000,
+                -1px -1px 0   #000000,
+                1px -1px 0   #000000,
+                -1px  1px 0   #000000,
+                1px  1px 0   #000000,
+                -1px -1px 0   #000000,
+                1px -1px 0   #000000,
+                -1px  1px 0   #000000,
+                1px  1px 0   #000000;
+        margin-left: 10px;
+
+    }
+    button, button::after{
+width:100px;
+        font-size: 24px;
+        font-family: 'Bebas Neue', cursive;
+        background: linear-gradient(45deg, transparent 5%, #D2006B 5%);
+        border: 0;
+        color: #fff;
+        letter-spacing: 3px;
+        line-height: 48px;
+        box-shadow: 6px 0px 0px #00E6F6;
+        outline: transparent;
+        position: relative;
+    }
+
+    button::after {
+        --slice-0: inset(50% 50% 50% 50%);
+        --slice-1: inset(80% -6px 0 0);
+        --slice-2: inset(50% -6px 30% 0);
+        --slice-3: inset(10% -6px 85% 0);
+        --slice-4: inset(40% -6px 43% 0);
+        --slice-5: inset(80% -6px 5% 0);
+
+        content: 'AVAILABLE NOW';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 3%, #40f5e0 3%, #00E6F6 5%, #06fde0 5%);
+        text-shadow: -3px -3px 0px #F8F005, 3px 3px 0px #00E6F6;
+        clip-path: var(--slice-0);
+    }
+
+    button:hover::after {
+        animation: 1s glitch;
+        animation-timing-function: steps(2, end);
+    }
+
+    @keyframes glitch {
+        0% {
+            clip-path: var(--slice-1);
+            transform: translate(-20px, -10px);
+        }
+        10% {
+            clip-path: var(--slice-3);
+            transform: translate(10px, 10px);
+        }
+        20% {
+            clip-path: var(--slice-1);
+            transform: translate(-10px, 10px);
+        }
+        30% {
+            clip-path: var(--slice-3);
+            transform: translate(0px, 5px);
+        }
+        40% {
+            clip-path: var(--slice-2);
+            transform: translate(-5px, 0px);
+        }
+        50% {
+            clip-path: var(--slice-3);
+            transform: translate(5px, 0px);
+        }
+        60% {
+            clip-path: var(--slice-4);
+            transform: translate(5px, 10px);
+        }
+        70% {
+            clip-path: var(--slice-2);
+            transform: translate(-10px, 10px);
+        }
+        80% {
+            clip-path: var(--slice-5);
+            transform: translate(20px, -10px);
+        }
+        90% {
+            clip-path: var(--slice-1);
+            transform: translate(-10px, 0px);
+        }
+        100% {
+            clip-path: var(--slice-1);
+            transform: translate(0);
+        }
+    }
+
+</style>
+</body>
+</html>
